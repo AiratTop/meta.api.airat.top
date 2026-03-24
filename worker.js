@@ -294,26 +294,28 @@ function extractMetadata(html) {
     }
   }
 
+  const metaValue = (key) => normalizeValue(byName[key] ?? byProperty[key] ?? null);
+
   return {
     title: normalizeValue(title),
-    description: normalizeValue(byName.description),
+    description: metaValue('description'),
     canonical,
-    robots: normalizeValue(byName.robots),
+    robots: metaValue('robots'),
     lang: normalizeValue(htmlLang),
     charset,
     openGraph: {
-      title: normalizeValue(byProperty['og:title']),
-      description: normalizeValue(byProperty['og:description']),
-      image: normalizeValue(byProperty['og:image']),
-      url: normalizeValue(byProperty['og:url']),
-      type: normalizeValue(byProperty['og:type']),
-      siteName: normalizeValue(byProperty['og:site_name'])
+      title: metaValue('og:title'),
+      description: metaValue('og:description'),
+      image: metaValue('og:image'),
+      url: metaValue('og:url'),
+      type: metaValue('og:type'),
+      siteName: metaValue('og:site_name')
     },
     twitter: {
-      card: normalizeValue(byName['twitter:card']),
-      title: normalizeValue(byName['twitter:title']),
-      description: normalizeValue(byName['twitter:description']),
-      image: normalizeValue(byName['twitter:image'])
+      card: metaValue('twitter:card'),
+      title: metaValue('twitter:title'),
+      description: metaValue('twitter:description'),
+      image: metaValue('twitter:image')
     }
   };
 }
