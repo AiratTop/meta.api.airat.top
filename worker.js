@@ -114,7 +114,7 @@ function toYaml(value, indent = 0) {
 
   if (Array.isArray(value)) {
     if (value.length === 0) {
-      return '[]';
+      return `${prefix}[]`;
     }
 
     return value
@@ -132,11 +132,24 @@ function toYaml(value, indent = 0) {
   if (typeof value === 'object') {
     const entries = Object.entries(value);
     if (entries.length === 0) {
-      return '{}';
+      return `${prefix}{}`;
     }
 
     return entries
       .map(([key, child]) => {
+        if (Array.isArray(child) && child.length === 0) {
+          return `${prefix}${key}: []`;
+        }
+
+        if (
+          child
+          && typeof child === 'object'
+          && !Array.isArray(child)
+          && Object.keys(child).length === 0
+        ) {
+          return `${prefix}${key}: {}`;
+        }
+
         if (child === null || typeof child !== 'object') {
           return `${prefix}${key}: ${toYaml(child, 0)}`;
         }
