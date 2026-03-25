@@ -124,7 +124,14 @@ function toYaml(value, indent = 0) {
         }
 
         const nested = toYaml(entry, indent + 1);
-        return `${prefix}-\n${nested}`;
+        const lines = nested.split('\n');
+        const firstPrefix = '  '.repeat(indent + 1);
+        const firstLine = lines[0].startsWith(firstPrefix)
+          ? lines[0].slice(firstPrefix.length)
+          : lines[0];
+        const rest = lines.slice(1).join('\n');
+
+        return rest ? `${prefix}- ${firstLine}\n${rest}` : `${prefix}- ${firstLine}`;
       })
       .join('\n');
   }
